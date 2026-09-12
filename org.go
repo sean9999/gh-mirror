@@ -18,7 +18,14 @@ func (o Org) Repos() []Repo {
 		return nil
 	}
 
+
+	
+
 	repos := make([]Repo, 0)
+
+
+	err := json.Marshal(repos, stdOut)
+
 	return repos
 }
 
