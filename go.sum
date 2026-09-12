@@ -1,3 +1,5 @@
+github.com/armed/mkdirp v0.0.0-20131130152020-ca11de6afd41 h1:efLfm3jYm4oDnt143NOYkuMFzKx/N74QTivPkxscX78=
+github.com/armed/mkdirp v0.0.0-20131130152020-ca11de6afd41/go.mod h1:JhtTg8RRU1V4aKsyBxW31hxpvyYoz4+9NHC+aJ/DDPM=
 github.com/aymanbagabas/go-osc52/v2 v2.0.1 h1:HwpRHbFMcZLEVr42D4p7XBqjyuxQH5SMiErDT4WkJ2k=
 github.com/aymanbagabas/go-osc52/v2 v2.0.1/go.mod h1:uYgXzlJ7ZpABp8OJ+exZzJJhRNQ2ASbcXHWsFqH8hp8=
 github.com/charmbracelet/colorprofile v0.2.3-0.20250311203215-f60798e515dc h1:4pZI35227imm7yK2bGPcfpFEmuY1gc2YSTShr4iJBfs=
@@ -32,6 +34,8 @@ github.com/muesli/reflow v0.3.0 h1:IFsN6K9NfGtjeggFP+68I4chLZV2yIKsXJFNZ+eWh6s=
 github.com/muesli/reflow v0.3.0/go.mod h1:pbwTDkVPibjO2kyvBQRBxTWEEGDGq0FlB1BIKtnHY/8=
 github.com/muesli/termenv v0.16.0 h1:S5AlUN9dENB57rsbnkPyfdGuWIlkmzJjbFf0Tf5FWUc=
 github.com/muesli/termenv v0.16.0/go.mod h1:ZRfOIKPFDYQoDFF4Olj7/QJbW60Ol/kL1pU3VfY/Cnk=
+github.com/nodefortytwo/isgit v1.0.0 h1:xmMoZkwkDvn0C1hs9Xq+GNbKI5rT/3E9vdIkMRsybJA=
+github.com/nodefortytwo/isgit v1.0.0/go.mod h1:wnC83WUUS49X6k6BVDPX7oLBLLQhbyUTVh7XpMjz55E=
 github.com/rivo/uniseg v0.4.7 h1:WUdvkW8uEhrYfLC4ZzdpI2ztxP1I582+49Oc5Mq64VQ=
 github.com/rivo/uniseg v0.4.7/go.mod h1:FN3SvrM+Zdj16jyLfmOkMNblXMcoc8DfTHruCPUcx88=
 github.com/stretchr/testify v1.12.1 h1:EuwCh5fleGS7H32xRwO3wRGT7DxrDhLAT6FF8MpWDWE=

@@ -2,36 +2,25 @@ package main
 
 import (
 	"fmt"
-	"log"
-
-	gh "github.com/cli/go-gh/v2"
+	"os"
+	"strings"
 )
 
+const RootDir = "/Users/6012777/repos/rona/mirroir"
+
 func main() {
-	args := []string{"org", "list"}
-	stdOut, stdErr, err := gh.Exec(args...)
-	if err != nil {
-		fmt.Println(stdErr.String())
-		log.Fatal(err)
+	orgs := GetOrgs()
+	for _, org := range orgs {
+		fmt.Println(org.Name)
+		repos, err := org.Repos()
+		if err != nil {
+			panic(err)
+		}
+		for _, repo := range repos {
+			fmt.Println(repo.Name)
+			myDir := strings.Join([]string{RootDir, org.Name, repo.Name}, string(os.PathSeparator))
+			err := EnsureSynced(org, repo, myDir)
+			fmt.Println(err)
+		}
 	}
-
-
-	orgs := OrgsFromString(stdOut.String())
-
-	fmt.Println(orgs)
-
-
-	repos := orgs[0].Repos()
-
-	for _, repo := range repos {
-
-		fmt.Println(repo.Name)
-
-	}
-
-	//a,_,_ := gh.Exec("repo", "list", "devops-rona")
-
-	//fmt.Println(a.String())
-
-
 }

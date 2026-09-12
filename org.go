@@ -1,34 +1,26 @@
 package main
 
 import (
+	"encoding/json"
+	"log"
 	"strings"
-	"fmt"
-	gh "github.com/cli/go-gh/v2"
+
+	"github.com/cli/go-gh/v2"
 )
 
 type Org struct {
 	Name string
 }
 
-// gh repo list devops-rona --json name,url,id
-
-func (o Org) Repos() []Repo {
-	stdOut, _, err := gh.Exec("repo", "list", o.Name, "--json", "name,url,id")
+func (o Org) Repos() ([]Repo, error) {
+	stdOut, _, err := gh.Exec("repo", "list", o.Name, "--json", "name,url,sshUrl,id")
 	if err != nil {
-		return nil
+		return nil, err
 	}
-
-
-	
-
 	repos := make([]Repo, 0)
-
-
-	err := json.Marshal(repos, stdOut)
-
-	return repos
+	err = json.Unmarshal(stdOut.Bytes(), &repos)
+	return repos, err
 }
-
 
 func firstPart(s string) string {
 	pieces := strings.Split(s, " ")
@@ -42,7 +34,6 @@ func OrgsFromString(s string) []Org {
 	names := strings.Split(s, "\n")
 	orgs := make([]Org, 0, len(names))
 	for _, name := range names {
-
 		if len(name) > 0 {
 			orgs = append(orgs, Org{name})
 		}
@@ -50,3 +41,12 @@ func OrgsFromString(s string) []Org {
 	return orgs
 }
 
+func GetOrgs() []Org {
+	args := []string{"org", "list"}
+	stdOut, _, err := gh.Exec(args...)
+	if err != nil {
+		log.Fatal(err)
+	}
+	orgs := OrgsFromString(stdOut.String())
+	return orgs
+}
