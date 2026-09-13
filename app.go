@@ -19,8 +19,9 @@ type state struct {
 func (a *state) Run(env *hermeti.Env) {
 	if len(env.Args) < 2 {
 		a.rootDir = "."
+	} else {
+		a.rootDir = env.Args[1]
 	}
-	a.rootDir = env.Args[1]
 	err := EnsureDir(env, env.Args[1])
 	if err != nil {
 		fmt.Fprintln(env.ErrStream, "You must pass in a valid directory")
