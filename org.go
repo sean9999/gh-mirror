@@ -1,44 +1,32 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"log"
 	"strings"
 
 	"github.com/cli/go-gh/v2"
+	"github.com/sean9999/hermeti"
 )
 
 type Org struct {
 	Name string
 }
 
-func (o Org) Repos() ([]Repo, error) {
-	stdOut, _, err := gh.Exec("repo", "list", o.Name, "--json", "name,url,sshUrl,id")
+// Repos gets all repos in an Org
+func (o Org) Repos(env *hermeti.Env) ([]Repo, error) {
+	buf := bytes.NewBuffer(nil)
+	err := runCli(buf, env.ErrStream, "repo", "list", o.Name, "--json", "name,url,sshUrl,id")
 	if err != nil {
 		return nil, err
 	}
-	repos := make([]Repo, 0)
-	err = json.Unmarshal(stdOut.Bytes(), &repos)
+	repos := make([]Repo, 0, 64)
+	err = json.Unmarshal(buf.Bytes(), &repos)
+	for i := range repos {
+		repos[i].Org = o
+	}
 	return repos, err
-}
-
-func firstPart(s string) string {
-	pieces := strings.Split(s, " ")
-	if len(pieces) > 0 {
-		return pieces[0]
-	}
-	return ""
-}
-
-func OrgsFromString(s string) []Org {
-	names := strings.Split(s, "\n")
-	orgs := make([]Org, 0, len(names))
-	for _, name := range names {
-		if len(name) > 0 {
-			orgs = append(orgs, Org{name})
-		}
-	}
-	return orgs
 }
 
 func GetOrgs() []Org {
@@ -47,6 +35,17 @@ func GetOrgs() []Org {
 	if err != nil {
 		log.Fatal(err)
 	}
-	orgs := OrgsFromString(stdOut.String())
+	orgs := orgsFromString(stdOut.String())
+	return orgs
+}
+
+func orgsFromString(s string) []Org {
+	names := strings.Split(s, "\n")
+	orgs := make([]Org, 0, len(names))
+	for _, name := range names {
+		if len(name) > 0 {
+			orgs = append(orgs, Org{name})
+		}
+	}
 	return orgs
 }

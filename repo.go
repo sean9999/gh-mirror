@@ -5,4 +5,5 @@ type Repo struct {
 	Id     string `json:"id"`
 	Url    string `json:"url"`
 	SshUrl string `json:"sshUrl"`
+	Org    Org
 }
