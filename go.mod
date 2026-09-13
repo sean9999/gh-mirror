@@ -1,4 +1,4 @@
-module github.com/sean9999/gh-mirroir
+module github.com/sean9999/gh-mirror
 
 go 1.27.0
 
@@ -14,6 +14,4 @@ require (
 	github.com/cli/safeexec v1.0.1 // indirect
 	github.com/sean9999/pear v0.0.5 // indirect
 	github.com/smartystreets/goconvey v1.8.1 // indirect
-	github.com/spf13/afero v1.15.0 // indirect
-	golang.org/x/text v0.42.0 // indirect
 )
