@@ -1,4 +1,4 @@
-REPO=github.com/sean9999/gh-mirror
+REPO=$$(go list -m)
 SEMVER := $$(git tag --sort=-version:refname | head -n 1)
 
 .PHONY: test
