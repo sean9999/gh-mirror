@@ -20,7 +20,7 @@ func (a *state) Run(env *hermeti.Env) {
 	} else {
 		a.rootDir = env.Args[1]
 	}
-	err := EnsureDir(env, env.Args[1])
+	err := EnsureDir(env, a.rootDir)
 	if err != nil {
 		fmt.Fprintln(env.ErrStream, "You must pass in a valid directory")
 		panic(err)

@@ -23,4 +23,4 @@ Use it like this:
 $ gh mirror /path/to/mirror
 ```
 
-If the folder doesn't exist, it'll be created.
+If the folder doesn't exist, it'll be created. If you don't pass in a folder argument, current directory is assumed.
