@@ -14,7 +14,7 @@ type Org struct {
 	Name string
 }
 
-// Repos gets all repos in an Org
+// Repos fetches all repos in an Org
 func (o Org) Repos(env *hermeti.Env) ([]Repo, error) {
 	buf := bytes.NewBuffer(nil)
 	err := runCli(buf, env.ErrStream, "repo", "list", o.Name, "--json", "name,url,sshUrl,id")

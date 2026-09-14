@@ -37,7 +37,7 @@ func (a *state) Run(env *hermeti.Env) {
 		for _, repo := range repos {
 			fmt.Fprintf(env.OutStream, "%s\t%s\n", repo.Org.Name, repo.Name)
 			myDir := strings.Join([]string{a.rootDir, org.Name, repo.Name}, string(os.PathSeparator))
-			err := EnsureSynced(env, org, repo, myDir)
+			err := EnsureSynced(env, repo, myDir)
 			if err != nil {
 				fmt.Fprintln(env.ErrStream, err)
 			}

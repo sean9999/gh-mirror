@@ -8,7 +8,7 @@ import (
 	"github.com/sean9999/hermeti"
 )
 
-func sync(env *hermeti.Env, org Org, repo Repo) error {
+func sync(env *hermeti.Env) error {
 	return runCli(env.OutStream, env.ErrStream, "repo", "sync")
 }
 
@@ -18,7 +18,7 @@ func clone(env *hermeti.Env, repo Repo) error {
 
 // EnsureSynced ensures a folder is a git repo and is synced to upstream,
 // cloning if necessary.
-func EnsureSynced(env *hermeti.Env, org Org, repo Repo, dir string) error {
+func EnsureSynced(env *hermeti.Env, repo Repo, dir string) error {
 	err := EnsureDir(env, dir)
 	if err != nil {
 		return err
@@ -28,7 +28,7 @@ func EnsureSynced(env *hermeti.Env, org Org, repo Repo, dir string) error {
 		return err
 	}
 	if isRepo {
-		return sync(env, org, repo)
+		return sync(env)
 	}
 	return clone(env, repo)
 }

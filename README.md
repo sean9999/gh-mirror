@@ -1,17 +1,15 @@
 # Mirror
 
-This is a github cli (gh) plugin for mirroring all the repos
-in an organization of set of organizations.
+This is a GitHub CLI (gh) plugin for mirroring all the repos
+in an organization, or set of organizations.
 
 It will create a folder for every organization you're authenticated against,
 and then clone or sync all the repos in the org folder.
 
-If repos don't exist locally, they'll be cloned. If they do, they'll be synced.
+If repos don't exist locally, they'll be cloned. If they do, they'll be [synced](https://cli.github.com/manual/gh_repo_sync).
 
-synced means local tips will be updated to remote tips. Like `git pull`.
-
-In a given repo, if it's in a dirty state
-or contains commits that have not been pushed, it will refuse to act.
+If a repo's in a dirty state or contains commits that have not been pushed,
+it will refuse to act. It's non destructive.
 
 Install it like this:
 
@@ -25,4 +23,4 @@ Use it like this:
 $ gh mirror /path/to/mirror
 ```
 
-The mirror will be created if you point to a folder that doesn't yet exist.
+If the folder doesn't exist, it'll be created.
