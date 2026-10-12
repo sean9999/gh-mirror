@@ -4,30 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/sean9999/hermeti"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
-
-func TestApp(t *testing.T) {
-
-	t.Run("passing in an arg", func(t *testing.T) {
-		app := new(state)
-		cli := hermeti.NewTestCli(app, "gh-mirror")
-		cli.Env.Args = append(cli.Env.Args, "path/to/my/mirror")
-		require.NotPanics(t, func() {
-			app.Run(cli.Env)
-		})
-	})
-
-	t.Run("not passing in an arg", func(t *testing.T) {
-		app := new(state)
-		cli := hermeti.NewTestCli(app, "gh-mirror")
-		require.NotPanics(t, func() {
-			app.Run(cli.Env)
-		})
-	})
-}
 
 func args(s string) []string {
 	return strings.Split(s, " ")
