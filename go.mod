@@ -7,10 +7,12 @@ require (
 	github.com/cli/go-gh/v2 v2.16.0
 	github.com/nodefortytwo/isgit v1.0.0
 	github.com/sean9999/hermeti v1.0.1
+	github.com/stretchr/testify v1.12.1
 	golang.org/x/sync v0.23.0
 )
 
 require (
 	github.com/cli/safeexec v1.0.1 // indirect
 	github.com/smartystreets/goconvey v1.8.1 // indirect
+	go.yaml.in/yaml/v3 v3.0.5 // indirect
 )

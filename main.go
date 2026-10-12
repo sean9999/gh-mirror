@@ -26,9 +26,12 @@ type state struct {
 }
 
 func (a *state) Run(env *hermeti.Env) {
+
 	ctx := context.Background()
 
-	a.parseArgs(env.Args[1:])
+	if len(env.Args) > 0 {
+		a.parseArgs(env.Args[1:])
+	}
 
 	err := EnsureDir(env, a.rootDir)
 	if err != nil {
