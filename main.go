@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"os"
@@ -8,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/sean9999/hermeti"
+	"golang.org/x/sync/errgroup"
 )
 
 var _ hermeti.Runner = (*state)(nil)
@@ -19,9 +21,13 @@ type state struct {
 	selectedOrgs []string
 	// A list of excluded organizations. Any organization in this list will be skipped.
 	excludedOrgs []string
+	// Number of threads to use for syncing
+	threads int
 }
 
 func (a *state) Run(env *hermeti.Env) {
+
+	ctx := context.Background()
 
 	if len(env.Args) > 0 {
 		a.parseArgs(env.Args[1:])
@@ -41,19 +47,34 @@ func (a *state) Run(env *hermeti.Env) {
 			continue
 		}
 
-		fmt.Fprintf(env.OutStream, "Syncing organization: %s\n", org.Name)
+		orgDir := strings.Join([]string{a.rootDir, org.Name}, string(os.PathSeparator))
+		fmt.Fprintf(env.OutStream, "Syncing organization '%s' to '%s'\n", org.Name, orgDir)
 
 		repos, err := org.Repos(env)
 		if err != nil {
-			panic(err)
+			fmt.Fprintf(env.ErrStream, "Failed to get repos for org %s: %v\n", org.Name, err)
+			continue
 		}
+
+		eg, _ := errgroup.WithContext(ctx)
+		eg.SetLimit(a.threads)
+
 		for _, repo := range repos {
-			fmt.Fprintf(env.OutStream, "Syncing repository: %s/%s\n", org.Name, repo.Name)
-			myDir := strings.Join([]string{a.rootDir, org.Name, repo.Name}, string(os.PathSeparator))
-			err := EnsureSynced(env, repo, myDir)
-			if err != nil {
-				fmt.Fprintln(env.ErrStream, err)
-			}
+			eg.Go(func() error {
+				fmt.Fprintf(env.OutStream, "Syncing repository: %s/%s\n", org.Name, repo.Name)
+				myDir := strings.Join([]string{a.rootDir, org.Name, repo.Name}, string(os.PathSeparator))
+				err := EnsureSynced(env, repo, myDir)
+				if err != nil {
+					fmt.Fprintln(env.ErrStream, err)
+				}
+
+				return nil
+			})
+		}
+
+		err = eg.Wait()
+		if err != nil {
+			fmt.Fprintf(env.ErrStream, "Failed to sync org %s: %v\n", org.Name, err)
 		}
 	}
 }
@@ -67,7 +88,6 @@ func (a *state) shouldSyncOrg(org Org) bool {
 }
 
 func (a *state) parseArgs(args []string) {
-
 	flagSet := flag.NewFlagSet("args", flag.PanicOnError)
 
 	var selectedOrgs Strings
@@ -75,6 +95,9 @@ func (a *state) parseArgs(args []string) {
 
 	var excludedOrgs Strings
 	flagSet.Var(&excludedOrgs, "without-org", "comma separated list of orgs to skip, can be specified multiple times")
+
+	var threads int
+	flagSet.IntVar(&threads, "threads", 4, "number of threads to use for syncing")
 
 	flagSet.Parse(args)
 
@@ -86,6 +109,7 @@ func (a *state) parseArgs(args []string) {
 	a.rootDir = rootDir
 	a.selectedOrgs = selectedOrgs
 	a.excludedOrgs = excludedOrgs
+	a.threads = threads
 }
 
 func main() {
