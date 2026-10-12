@@ -1,4 +1,4 @@
-REPO=$$(go list -m)
+REPO=$$(go list -m | head -n 1)
 SEMVER := $$(git tag --sort=-version:refname | head -n 1)
 
 .PHONY: test
