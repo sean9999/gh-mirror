@@ -14,7 +14,7 @@ var _ hermeti.Runner = (*state)(nil)
 
 type state struct {
 	// Where the mirror should live
-	rootDir      string
+	rootDir string
 	// A list of selected organizations. If the list is not empty, only the selected organizations will be synced.
 	selectedOrgs []string
 	// A list of excluded organizations. Any organization in this list will be skipped.
@@ -22,7 +22,10 @@ type state struct {
 }
 
 func (a *state) Run(env *hermeti.Env) {
-	a.parseArgs(env.Args[1:])
+
+	if len(env.Args) > 0 {
+		a.parseArgs(env.Args[1:])
+	}
 
 	err := EnsureDir(env, a.rootDir)
 	if err != nil {
